@@ -8,6 +8,8 @@ class Game {
     this.leader1 = createElement("h2");
     this.leader2 = createElement("h2");
     this.playerMoving = false;
+
+    this.leftKeyActive = false;
   }
 
   getState() {
@@ -158,6 +160,7 @@ class Game {
 
           this.handleFuel(index);
           this.handlePowerCoins(index);
+          this.handleObstacleCollation(index);
           
           // Changing camera position in y direction
           camera.position.x = cars[index - 1].position.x;
@@ -189,6 +192,44 @@ class Game {
       drawSprites();
     }
   }
+  
+  
+ handleObstacleCollation(index){
+  if(cars[index-1].collide(obstacle1)||cars[index-1].collide(obstacle2)){
+
+
+
+      if(this.leftKeyActive){
+        player.positionX += 100
+      }else{
+        player.positionX-=100
+      }
+      if(player.life<0){
+        this.gameOver()
+      }
+
+
+
+
+
+
+
+
+
+
+    if(player.life>0)
+{
+  player.life-=185/4
+  player.update()
+}
+
+  }
+
+ }
+
+
+
+
   showFuelBar() {
     push();
     image(fuelImage, width / 2 - 130, height - player.positionY - 100, 20, 20);
@@ -298,16 +339,18 @@ handlePlayerControls() {
 
     player.positionY += 10;
     player.update();
+    
   }
 
   if (keyIsDown(LEFT_ARROW) && player.positionX > width / 3 - 50) {
     player.positionX -= 5;
     player.update();
-  }
+    this.leftKeyActive = true}
 
   if (keyIsDown(RIGHT_ARROW) && player.positionX < width / 2 + 300) {
     player.positionX += 5;
     player.update();
+    this.leftKeyActive = false
   }
 }
 showRank() {
